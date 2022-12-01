@@ -25,6 +25,16 @@ if [[ $OS == "Unsupported" ]]; then
     echo "Unsupported OS"
 fi
 
+PLUGINS=''
+PLUGINS+='export PYENV_ROOT="$HOME\/\.pyenv"'
+PLUGINS+='\n'
+PLUGINS+='command -v pyenv >\/dev\/null || export PATH="$PYENV_ROOT\/bin:$PATH"'
+PLUGINS+='\n'
+PLUGINS+='eval "$(pyenv init -)"'
+PLUGINS+='\n'
+PLUGINS+='plugins=(git docker-compose zsh-syntax-highlighting zsh-autosuggestions k z \n\tautoswitch_virtualenv)'
+ZSHRC_PLUGINS=$(printf '%s\n' "$PLUGINS")
+
 DEFAULT_PYTHON=3.10
 
 if [[ $OS == "MacOS" ]]; then
@@ -61,14 +71,11 @@ if [[ $OS == "MacOS" ]]; then
 
     # Update oh-my-zsh
     sed -i '' 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
-    sed -i '' 's/plugins=(git)/plugins=(git docker-compose zsh-syntax-highlighting zsh-autosuggestions k z \n\tautoswitch_virtualenv)/' ~/.zshrc
+    sed -i '' "s/plugins=(git)/${ZSHRC_PLUGINS}/" ~/.zshrc
 
     # install pyenv
     brew install pyenv
     echo '\nalias brew="env PATH=${PATH//$(pyenv root)\/shims:/} brew"' >>~/.zshrc
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >>~/.zshrc
-    echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >>~/.zshrc
-    echo 'eval "$(pyenv init -)"' >>~/.zshrc
 
     # install python
     pyenv install $DEFAULT_PYTHON
@@ -111,13 +118,10 @@ elif [[ $OS == "Linux" ]]; then
 
     # Update oh-my-zsh
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
-    sed -i 's/plugins=(git)/plugins=(git docker-compose zsh-syntax-highlighting zsh-autosuggestions k z \n\tautoswitch_virtualenv)/' ~/.zshrc
+    sed -i '' "s/plugins=(git)/${ZSHRC_PLUGINS}/" ~/.zshrc
 
     # install pyenv
     curl https://pyenv.run | bash
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >>~/.zshrc
-    echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >>~/.zshrc
-    echo 'eval "$(pyenv init -)"' >>~/.zshrc
 
     # install python
     pyenv install $DEFAULT_PYTHON
