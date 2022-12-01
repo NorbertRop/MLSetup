@@ -102,7 +102,11 @@ elif [[ $OS == "Linux" ]]; then
 
     # install zsh-autoswitch-virtualenv
     git clone "https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv.git" "$ZSH_CUSTOM/plugins/autoswitch_virtualenv"
-
+    
+    # install terminal and synapse
+    sudo apt update
+    sudo apt install guake synapse
+    
     # install fonts
     sudo apt-get install fonts-powerline
 
