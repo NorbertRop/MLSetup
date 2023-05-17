@@ -1,27 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    OS="Linux"
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    OS="MacOS"
-elif [[ "$OSTYPE" == "cygwin" ]]; then
-    # POSIX compatibility layer and Linux environment emulation for Windows
-    OS="Unsupported"
-elif [[ "$OSTYPE" == "msys" ]]; then
-    # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
-    OS="Unsupported"
-elif [[ "$OSTYPE" == "win32" ]]; then
-    # I'm not sure this can happen.
-    OS="Unsupported"
-elif [[ "$OSTYPE" == "freebsd"* ]]; then
-    # ...
-    OS="Unsupported"
-else
-    # Unknown.
-    OS="Unsupported"
-fi
+os_type=$(uname)
 
-if [[ $OS == "Unsupported" ]]; then
+case "$os_type" in
+    Linux*)
+        echo "Linux detected"
+        OS="Linux"
+        ;;
+    Darwin*)
+        echo "macOS detected"
+        OS="MacOS"
+        ;;
+    *)
+        echo "Unsupported OS"
+        OS="Unsupported"
+        ;;
+esac
+
+if [ "$OS" = "Unsupported" ]; then
     echo "Unsupported OS"
 fi
 
@@ -32,12 +28,14 @@ PLUGINS+='command -v pyenv >\/dev\/null || export PATH="$PYENV_ROOT\/bin:$PATH"'
 PLUGINS+='\n'
 PLUGINS+='eval "$(pyenv init -)"'
 PLUGINS+='\n'
-PLUGINS+='plugins=(git docker-compose zsh-syntax-highlighting zsh-autosuggestions k z \n\tautoswitch_virtualenv)'
+PLUGINS+='plugins=(git docker-compose zsh-syntax-highlighting zsh-autosuggestions k z'
+PLUGINS+='\n'
+PLUGINS+='\tautoswitch_virtualenv)'
 ZSHRC_PLUGINS=$(printf '%s\n' "$PLUGINS")
 
-DEFAULT_PYTHON=3.10
+DEFAULT_PYTHON=3.11
 
-if [[ $OS == "MacOS" ]]; then
+if [ "$OS" = "MacOS" ]; then
     # MacOS comes with pre-installed zsh
 
     # install Homebrew
@@ -57,7 +55,7 @@ if [[ $OS == "MacOS" ]]; then
     brew install coreutils
     git clone https://github.com/supercrabtree/k ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/k
     echo '\n# Set PATH for coreutils.' >>~/.zshrc
-    echo 'export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"' >>~/.zshrc
+    echo 'export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"' >> ~/.zshrc
 
     # install a command-line fuzzy finder
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
@@ -89,7 +87,7 @@ if [[ $OS == "MacOS" ]]; then
 
     source ~/.zshrc
 
-elif [[ $OS == "Linux" ]]; then
+elif [ "$OS" == "Linux" ]; then
     # install zsh
     sudo apt install zsh
 
@@ -124,11 +122,18 @@ elif [[ $OS == "Linux" ]]; then
 
     # Update oh-my-zsh
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
-    sed -i '' "s/plugins=(git)/${ZSHRC_PLUGINS}/" ~/.zshrc
+    sed -i "s/plugins=(git)/${ZSHRC_PLUGINS}/" ~/.zshrc
 
     # install pyenv
     curl https://pyenv.run | bash
-    
+
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+    echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+    echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+
     sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev curl \
     libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
@@ -139,9 +144,7 @@ elif [[ $OS == "Linux" ]]; then
 
     # install poetry
     curl -sSL https://install.python-poetry.org | python3 -
-    echo '\nexport PATH="/Users/norbert/.local/bin:$PATH"' >>~/.zshrc
-
-    source ~/.zshrc
+    echo 'export PATH="/Users/norbert/.local/bin:$PATH"' >> ~/.zshrc
 else
-    return 1
+    exit 1
 fi
