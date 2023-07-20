@@ -40,6 +40,8 @@ if [ "$OS" = "MacOS" ]; then
 
     # install Homebrew
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/norbertropiak/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
     brew update
 
     # install oh-my-zsh
