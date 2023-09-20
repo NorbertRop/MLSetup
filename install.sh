@@ -145,7 +145,7 @@ elif [ "$OS" == "Linux" ]; then
 
     # install poetry
     curl -sSL https://install.python-poetry.org | python3 -
-    echo 'export PATH="~/.local/bin:$PATH"' >> ~/.zshrc
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 else
     exit 1
 fi
