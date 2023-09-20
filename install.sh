@@ -34,6 +34,7 @@ PLUGINS+='\tautoswitch_virtualenv)'
 ZSHRC_PLUGINS=$(printf '%s\n' "$PLUGINS")
 
 DEFAULT_PYTHON=3.11
+: ${IS_SERVER:=1}
 
 if [ "$OS" = "MacOS" ]; then
     # MacOS comes with pre-installed zsh
@@ -90,6 +91,7 @@ if [ "$OS" = "MacOS" ]; then
     source ~/.zshrc
 
 elif [ "$OS" == "Linux" ]; then
+    sudo apt update
     # install zsh
     sudo apt install zsh
 
@@ -103,18 +105,19 @@ elif [ "$OS" == "Linux" ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
     # install k (Directory listings for zsh with git features)
-    git clone https://github.com/supercrabtree/k $ZSH_CUSTOM/plugins/k
+    git clone https://github.com/supercrabtree/k ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/k
 
     # install a command-line fuzzy finder
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
 
     # install zsh-autoswitch-virtualenv
-    git clone "https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv.git" "$ZSH_CUSTOM/plugins/autoswitch_virtualenv"
+    git clone "https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoswitch_virtualenv"
     
     # install terminal and synapse
-    sudo apt update
-    sudo apt install guake synapse
+    if [[ $IS_SERVER == 0 ]]; then
+        sudo apt install guake synapse
+    fi
     
     # install fonts
     sudo apt-get install fonts-powerline
