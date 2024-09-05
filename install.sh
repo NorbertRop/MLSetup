@@ -112,7 +112,7 @@ elif [ "$OS" == "Linux" ]; then
     ~/.fzf/install
 
     # install zsh-autoswitch-virtualenv
-    git clone "https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoswitch_virtualenv"
+    git clone "https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv.git" ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoswitch_virtualenv
     
     # install terminal and synapse
     if [[ $IS_SERVER == 0 ]]; then
