@@ -30,7 +30,7 @@ PLUGINS+='eval "$(pyenv init -)"'
 PLUGINS+='\n'
 PLUGINS+='plugins=(git docker-compose zsh-syntax-highlighting zsh-autosuggestions k z'
 PLUGINS+='\n'
-PLUGINS+='\tautoswitch_virtualenv)'
+PLUGINS+='\tautoswitch_virtualenv rye)'
 ZSHRC_PLUGINS=$(printf '%s\n' "$PLUGINS")
 
 DEFAULT_PYTHON=3.11
@@ -130,6 +130,8 @@ elif [ "$OS" == "Linux" ]; then
     sed -i "s/plugins=(git)/${ZSHRC_PLUGINS}/" ~/.zshrc
 
     curl -sSf https://rye.astral.sh/get | bash
+    mkdir $ZSH_CUSTOM/plugins/rye
+    rye self completion -s zsh > $ZSH_CUSTOM/plugins/rye/_rye
     # install pyenv
     # curl https://pyenv.run | bash
 
