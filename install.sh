@@ -129,23 +129,24 @@ elif [ "$OS" == "Linux" ]; then
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
     sed -i "s/plugins=(git)/${ZSHRC_PLUGINS}/" ~/.zshrc
 
+    curl -sSf https://rye.astral.sh/get | bash
     # install pyenv
-    curl https://pyenv.run | bash
+    # curl https://pyenv.run | bash
 
-    export PYENV_ROOT="$HOME/.pyenv"
-    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    # export PYENV_ROOT="$HOME/.pyenv"
+    # command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 
-    sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev curl \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    # sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
+    # libbz2-dev libreadline-dev libsqlite3-dev curl \
+    # libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
-    # install python
-    pyenv install $DEFAULT_PYTHON
-    pyenv global $DEFAULT_PYTHON
+    # # install python
+    # pyenv install $DEFAULT_PYTHON
+    # pyenv global $DEFAULT_PYTHON
 
-    # install poetry
-    curl -sSL https://install.python-poetry.org | python3 -
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+    # # install poetry
+    # curl -sSL https://install.python-poetry.org | python3 -
+    # echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 else
     exit 1
 fi
