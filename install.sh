@@ -24,7 +24,7 @@ fi
 PLUGINS=''
 PLUGINS+='plugins=(git docker-compose zsh-syntax-highlighting zsh-autosuggestions k z'
 PLUGINS+='\n'
-PLUGINS+='\tautoswitch_virtualenv rye)'
+PLUGINS+='\tautoswitch_virtualenv)'
 ZSHRC_PLUGINS=$(printf '%s\n' "$PLUGINS")
 
 : ${IS_SERVER:=1}
@@ -119,11 +119,10 @@ elif [ "$OS" == "Linux" ]; then
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
     sed -i "s/plugins=(git)/${ZSHRC_PLUGINS}/" ~/.zshrc
 
-    # curl -sSf https://rye.astral.sh/get | bash
     curl -LsSf https://astral.sh/uv/install.sh | sh
     source ~/.zshrc
 
-    echo "\nalias ls='exa --icons -F -H --group-directories-first --git -1'" >> ~/.zshrc
+    echo "\nalias ls='eza --icons -F -H --group-directories-first --git -1'" >> ~/.zshrc
 else
     exit 1
 fi
